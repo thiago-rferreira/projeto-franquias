@@ -6,6 +6,7 @@ function Home() {
     <div className={styles.main}>Hello World!
       <p>Teste</p>
       <p>Teste 2</p>
+      <p>Teste 3</p>
     </div>
   )
 }
