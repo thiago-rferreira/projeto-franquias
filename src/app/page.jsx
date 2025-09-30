@@ -3,7 +3,10 @@ import styles from './page.module.css'
 
 function Home() {
   return (
-    <div className={styles.main}>Hello World!</div>
+    <div className={styles.main}>Hello World!
+      <p>Teste</p>
+      <p>Teste 2</p>
+    </div>
   )
 }
 
