@@ -7,6 +7,7 @@ function Home() {
       <p>Teste</p>
       <p>Teste 2</p>
       <p>Teste 3.1</p>
+      <p>Teste Via Web</p>
     </div>
   )
 }
