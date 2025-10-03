@@ -1,4 +1,86 @@
-.container {
-    background-color: blueviolet;
-    height: 2rem;
-}
+.header {
+    background: white !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    background: white;
+  }
+  
+  .logo {
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .logo:hover {
+    opacity: 0.8;
+    text-decoration: none;
+  }
+  
+  .logoText {
+    margin: 0 !important;
+    font-size: 1.4rem !important;
+    font-weight: bold !important;
+    background: linear-gradient(45deg, #667eea, #764ba2) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    user-select: none;
+    color: transparent !important;
+  }
+  
+  .menu {
+    border: none !important;
+    background: transparent !important;
+    flex: 1;
+    justify-content: flex-end;
+    max-width: 500px;
+  }
+  
+  /* Evitar flash nos links */
+  .menu a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  
+  .menu a:hover {
+    text-decoration: none !important;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 16px;
+      flex-direction: column;
+      height: auto;
+      padding-top: 12px;
+      padding-bottom: 8px;
+    }
+    
+    .logo {
+      margin-bottom: 8px;
+    }
+    
+    .logoText {
+      font-size: 1.2rem !important;
+    }
+    
+    .menu {
+      width: 100%;
+      justify-content: center;
+    }
+  }
