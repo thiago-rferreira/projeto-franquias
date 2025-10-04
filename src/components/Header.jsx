@@ -5,7 +5,8 @@ import {
   HomeOutlined, 
   UserOutlined, 
   ShopOutlined, 
-  DashboardOutlined 
+  DashboardOutlined,
+  RocketOutlined
 } from '@ant-design/icons'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -34,6 +35,11 @@ export default function Header() {
       key: '/dashboard',
       label: <Link href="/dashboard">Dashboard</Link>,
       icon: <DashboardOutlined />
+    },
+    {
+      key: '/teste',
+      label: <Link href="/teste">Teste</Link>,
+      icon: <RocketOutlined />
     }
   ]
 
