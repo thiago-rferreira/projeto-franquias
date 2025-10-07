@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client'
 //Criar uma instancia/objeto/item do prisma
 const prisma = new PrismaClient()
 
+//GET ALL -> Pegar todas as franquias
 export async function GET() {
     try {
         // Usar o findMany() para trazer todas as franquias, e podemos fazer alteracoes, relaciomentos, ordenacoes dentro da func()
@@ -41,3 +42,5 @@ export async function GET() {
         )
     }
 }
+
+
