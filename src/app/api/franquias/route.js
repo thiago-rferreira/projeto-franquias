@@ -56,28 +56,39 @@ export async function POST(request) {
                 { status: 400 }
             )
         }
-        
+
         if (!cidade) {
             return NextResponse.json(
                 { error: 'O campo cidade é obrigatório.' },
                 { status: 400 }
             )
         }
-        
+
         if (!endereco) {
             return NextResponse.json(
                 { error: 'O campo endereço é obrigatório.' },
                 { status: 400 }
             )
         }
-        
+
         if (!telefone) {
             return NextResponse.json(
                 { error: 'O campo telefone é obrigatório.' },
                 { status: 400 }
             )
         }
-        
+
+        const franquia = await prisma.franquia.create({
+            data: {
+                nome,
+                cidade,
+                endereco,
+                telefone
+            }
+        })
+
+        return NextResponse.json(franquia, { status: 201 })
+
     } catch (error) {
         console.error('Erro ao criar franquia:', error)
         return NextResponse.json(
