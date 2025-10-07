@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET, e precisa ter request, { params } 
+// GetById, e precisa ter request, { params } 
 export async function GET(request, { params }) {
     try {
         //Capturei o id pelo params.id, e só tive certeza que é INT
@@ -18,6 +18,7 @@ export async function GET(request, { params }) {
             //Include pega o relacionamento e os funcionarios dele.
             include: {
                 funcionarios: true,
+                //count é o total
                 _count: {
                     select: { funcionarios: true }
                 }

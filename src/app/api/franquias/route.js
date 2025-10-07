@@ -43,4 +43,46 @@ export async function GET() {
     }
 }
 
+//POST -> Responsavel por criar uma franquia
+export async function POST(request) {
+    try {
+        const data = await request.json();
 
+        const { nome, cidade, endereco, telefone } = data;
+
+        if (!nome) {
+            return NextResponse.json(
+                { error: 'O campo nome é obrigatório.' },
+                { status: 400 }
+            )
+        }
+        
+        if (!cidade) {
+            return NextResponse.json(
+                { error: 'O campo cidade é obrigatório.' },
+                { status: 400 }
+            )
+        }
+        
+        if (!endereco) {
+            return NextResponse.json(
+                { error: 'O campo endereço é obrigatório.' },
+                { status: 400 }
+            )
+        }
+        
+        if (!telefone) {
+            return NextResponse.json(
+                { error: 'O campo telefone é obrigatório.' },
+                { status: 400 }
+            )
+        }
+        
+    } catch (error) {
+        console.error('Erro ao criar franquia:', error)
+        return NextResponse.json(
+            { error: 'Erro interno de servidor' },
+            { status: 500 }
+        )
+    }
+}
