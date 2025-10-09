@@ -24,10 +24,41 @@ function Franquias() {
         carregarFranquias();
     }, [])
 
+    //Table do antd
 
+
+    const columns = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'id'
+        },
+        {
+            title: 'Cidade',
+            dataIndex: 'cidade',
+            key: 'id'
+        },
+        {
+            title: 'Endereço',
+            dataIndex: 'endereco',
+            key: 'id'
+        },
+        {
+            title: 'Telefone',
+            dataIndex: 'telefone',
+            key: 'id'
+        }
+    ]
 
     return (
-        <div>Franquias</div>
+        <div>
+            <h1>Tabela de Franquias</h1>
+            <Table
+                columns={columns}
+                dataSource={franquias}
+                rowKey='id'
+            />
+        </div>
     )
 }
 
