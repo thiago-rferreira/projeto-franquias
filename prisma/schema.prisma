@@ -22,13 +22,13 @@ model Franquia {
 }
 
 model Funcionario {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   nome       String
-  email      String    @unique
+  email      String   @unique
   cargo      String
   salario    Float
   franquiaId Int
-  franquia   Franquia  @relation(fields: [franquiaId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  franquia   Franquia @relation(fields: [franquiaId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
