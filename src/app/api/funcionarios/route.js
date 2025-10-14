@@ -42,6 +42,7 @@ export async function POST(request) {
             )
         }
 
+        // Verificar se existe a franquia que eu quero cadastrar meu funcionario
         const franquiaExiste = await prisma.franquia.findUnique({
             where: { id: parseInt(franquiaId) }
         })
@@ -52,6 +53,8 @@ export async function POST(request) {
                 { status: 404 }
             )
         }
+
+        // Verificar se o email é unico
 
         const emailExiste = await prisma.funcionario.findUnique({
             where: { email }
@@ -64,6 +67,7 @@ export async function POST(request) {
             )
         }
 
+        // Criar o funcionario
         const funcionario = await prisma.funcionario.create({
             data: {
                 nome,
@@ -74,6 +78,7 @@ export async function POST(request) {
             }
         })
 
+        // Retornar a resposta
         return NextResponse.json(funcionario, { status: 201 })
 
     } catch (error) {
