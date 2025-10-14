@@ -81,3 +81,81 @@ export async function DELETE(request, { params }) {
     }
 
 }
+
+//Editar
+export async function PUT(request, { params }) {
+    try {
+        const id = parseInt(params.id)
+        const data = await request.json()
+
+        const { nome, email, cargo, salario, franquiaId } = data
+
+        // Verificar se todos os campos foram passados
+        if (!nome || !email || !cargo || !salario || !franquiaId) {
+            return NextResponse.json(
+                { error: 'Todos os campos são obrigatórios: nome, email, cargo, salario, franquiaId ' },
+                { status: 400 } // Testar sem o status
+            )
+        }
+
+        // Verificar se franquia existe usando o franquiaId
+        const franquia = await prisma.franquia.findUnique({
+            where: { id: parseInt(franquiaId) }
+        })
+
+        // Verifico
+        if (!franquia) {
+            return NextResponse.json(
+                { error: 'Franquia não encontrada, verifique o id para adicionar o funcionário' },
+                { status: 404 }
+            )
+        }
+
+        // Verificar se o email já existe, pois os emails sao unique
+        const emailExiste = await prisma.funcionario.findFirst({
+            where: {
+                email,
+                id: { not: id }
+            }
+        })
+
+        if (emailExiste) {
+            return NextResponse.json(
+                { error: 'Email já está em uso!' },
+                { status: 400 }
+            )
+        }
+
+
+        // fazer o update
+
+        const funcionario = await prisma.funcionario.update({
+            where: { id },
+            data: {
+                nome,
+                email,
+                cargo,
+                salario: parseFloat(salario),
+                franquiaId: parseInt(franquiaId)
+            }
+        })
+
+        // Retorna a resposta
+        return NextResponse.json({
+            funcionario: funcionario,
+            msg: 'Funcionario atualizado com sucesso!'
+        })
+
+        // alterar a opcao de poder editar qualquer propriedade
+
+        // tratativa do catch
+
+
+    } catch (error) {
+        console.error('Erro ao atualizar funcionario')
+        return NextResponse.json(
+            { error: 'Erro interno de servidor', error },
+            { status: 500 }
+        )
+    }
+}
