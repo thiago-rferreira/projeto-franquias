@@ -45,7 +45,8 @@ function Funcionarios() {
         {
             title: 'Salário',
             dataIndex: 'salario',
-            key: 'id'
+            key: 'id',
+            render: (s) => `R$ ${s.toFixed(2)}`
         },
         {
             title: 'Franquia',
