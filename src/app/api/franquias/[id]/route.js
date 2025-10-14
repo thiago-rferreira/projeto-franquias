@@ -100,8 +100,6 @@ export async function PUT(request, { params }) {
 
         const { nome, cidade, endereco, telefone } = data;
 
-        console.log(typeof (data))
-
         // Ou Object.keys(data).length === 0
         if (!data?.nome && !data?.cidade && !data?.endereco && !data?.telefone) {
             return NextResponse.json(

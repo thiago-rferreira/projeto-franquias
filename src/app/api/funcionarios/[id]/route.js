@@ -88,55 +88,73 @@ export async function PUT(request, { params }) {
         const id = parseInt(params.id)
         const data = await request.json()
 
+        console.log(data)
+
         const { nome, email, cargo, salario, franquiaId } = data
 
-        // Verificar se todos os campos foram passados
-        if (!nome || !email || !cargo || !salario || !franquiaId) {
-            return NextResponse.json(
-                { error: 'Todos os campos são obrigatórios: nome, email, cargo, salario, franquiaId ' },
-                { status: 400 } // Testar sem o status
-            )
-        }
 
-        // Verificar se franquia existe usando o franquiaId
-        const franquia = await prisma.franquia.findUnique({
-            where: { id: parseInt(franquiaId) }
+        // Verificar se funcionario existe
+        const funcionarioExiste = await prisma.funcionario.findUnique({
+            where: { id }
         })
 
-        // Verifico
-        if (!franquia) {
+        if (!funcionarioExiste) {
             return NextResponse.json(
-                { error: 'Franquia não encontrada, verifique o id para adicionar o funcionário' },
+                { error: 'Funcionário não encontrado' },
                 { status: 404 }
             )
         }
 
-        // Verificar se o email já existe, pois os emails sao unique
-        const emailExiste = await prisma.funcionario.findFirst({
-            where: {
-                email,
-                id: { not: id }
-            }
-        })
 
-        if (emailExiste) {
+        // Verificar se estou passando algum dado, ali de data
+        if (!data || Object.keys(data).length === 0) {
             return NextResponse.json(
-                { error: 'Email já está em uso!' },
+                { error: 'Voce precisa enviar algum dado' },
                 { status: 400 }
             )
         }
 
+        // Verifico se tem franquiaId, entao verifico se franquia existe
+        if (franquiaId) {
+            // Verificar se franquia existe usando o franquiaId
+            const franquia = await prisma.franquia.findUnique({
+                where: { id: parseInt(franquiaId) }
+            })
 
-        // fazer o update
+            // Verifico
+            if (!franquia) {
+                return NextResponse.json(
+                    { error: 'Franquia não encontrada, verifique o id para adicionar o funcionário' },
+                    { status: 404 }
+                )
+            }
+        }
+
+        if (email) {
+            // Verificar se o email já existe, pois os emails sao unique
+            const emailExiste = await prisma.funcionario.findFirst({
+                where: {
+                    email,
+                    id: { not: id }
+                }
+            })
+
+            if (emailExiste) {
+                return NextResponse.json(
+                    { error: 'Email já está em uso!' },
+                    { status: 400 }
+                )
+            }
+        }
 
         const funcionario = await prisma.funcionario.update({
             where: { id },
             data: {
-                nome,
-                email,
-                cargo,
-                salario: parseFloat(salario),
-                franquiaId: parseInt(franquiaId)
+                nome: nome ?? funcionarioExiste.nome,
+                email: email ?? funcionarioExiste.email, // if ternário reduzido
+                cargo: cargo ?? funcionarioExiste.cargo, // if ternário
+                salario: salario ? parseFloat(salario) : funcionarioExiste.salario,
+                franquiaId: franquiaId ? parseInt(franquiaId) : funcionarioExiste.franquiaId
             }
         })
 
@@ -146,13 +164,8 @@ export async function PUT(request, { params }) {
             msg: 'Funcionario atualizado com sucesso!'
         })
 
-        // alterar a opcao de poder editar qualquer propriedade
-
-        // tratativa do catch
-
-
     } catch (error) {
-        console.error('Erro ao atualizar funcionario')
+        console.error('Erro ao atualizar funcionario', error)
         return NextResponse.json(
             { error: 'Erro interno de servidor', error },
             { status: 500 }
