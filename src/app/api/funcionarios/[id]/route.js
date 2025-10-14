@@ -9,7 +9,6 @@ const prisma = new PrismaClient()
 //GetById
 export async function GET(request, { params }) {
     try {
-        // Ta errado eu sei!
         const id = parseInt(params.id);
 
         const funcionario = await prisma.funcionario.findUnique({
