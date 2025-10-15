@@ -88,10 +88,7 @@ export async function PUT(request, { params }) {
         const id = parseInt(params.id)
         const data = await request.json()
 
-        console.log(data)
-
         const { nome, email, cargo, salario, franquiaId } = data
-
 
         // Verificar se funcionario existe
         const funcionarioExiste = await prisma.funcionario.findUnique({
@@ -104,7 +101,6 @@ export async function PUT(request, { params }) {
                 { status: 404 }
             )
         }
-
 
         // Verificar se estou passando algum dado, ali de data
         if (!data || Object.keys(data).length === 0) {
