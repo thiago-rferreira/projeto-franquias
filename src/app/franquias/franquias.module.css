@@ -1,5 +1,11 @@
 .container {
     padding: 2rem;
-    height: 100vh;
-    background-color: rgb(219, 219, 219);
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.tableContainer {
+    background: rgb(255, 255, 255);
+    border-radius: 1rem;
+    padding: 2rem;
 }

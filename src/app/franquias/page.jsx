@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
+import { Table } from 'antd';
 
 function Franquias() {
     // Estado que gerencia franquias
@@ -29,10 +30,42 @@ function Franquias() {
         carregarFranquias()
     }, [])
 
+    // Colunas para o Table do Antd
+    const colunas = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'id'
+        },
+        {
+            title: 'Cidade',
+            dataIndex: 'cidade',
+            key: 'id'
+        },
+        {
+            title: 'Endereço',
+            dataIndex: 'endereco',
+            key: 'id'
+        },
+        {
+            title: 'Telefone',
+            dataIndex: 'telefone',
+            key: 'id'
+        }
+    ]
+
     return (
         <div className={styles.container}>
             <h1> Franquias </h1>
-            {loading ? <p>Carregando</p> : <pre>{JSON.stringify(franquias, null, 2)}</pre>}
+            <div className={styles.tableContainer}>
+                <Table
+                    columns={colunas} // montada anteriormente
+                    dataSource={franquias} // que vem da API
+                    loading={loading} // Controla o preenchimento da tabela
+                    rowKey="id"
+                    pagination={{ pageSize: 10 }}
+                />
+            </div>
         </div>
     )
 }
