@@ -56,12 +56,15 @@ function Franquias() {
 
     return (
         <div className={styles.container}>
-            <h1> Franquias </h1>
+            <h1 className={styles.title}> Franquias </h1>
             <div className={styles.tableContainer}>
                 <Table
                     columns={colunas} // montada anteriormente
                     dataSource={franquias} // que vem da API
-                    loading={loading} // Controla o preenchimento da tabela
+                    loading={{
+                        spinning: loading,
+                        tip: 'Carregando franquias, aguarde...'
+                    }} // Controla o preenchimento da tabela
                     rowKey="id"
                     pagination={{ pageSize: 10 }}
                 />
