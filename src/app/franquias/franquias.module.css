@@ -14,3 +14,10 @@
     padding: 1rem;
 }
 
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 2rem
+}

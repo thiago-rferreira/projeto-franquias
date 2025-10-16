@@ -65,6 +65,11 @@ function Franquias() {
         setModalVisible(false)
     }
 
+    const okModal = () => {
+        console.log('Clicou no OK');
+        setModalVisible(false)
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.top}>
@@ -73,6 +78,7 @@ function Franquias() {
                     type='primary'
                     icon={<PlusOutlined />}
                     onClick={showModal}
+                    className={styles.addButton}
                 >
                     Adicionar
                 </Button>
@@ -91,8 +97,10 @@ function Franquias() {
             </div>
 
             <Modal
+                title="Nova Franquia"
                 open={modalVisible}
                 onCancel={closeModal}
+                onOk={okModal}
             >
                 <p>Aqui teremos o formulario</p>
             </Modal>
