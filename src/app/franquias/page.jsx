@@ -2,13 +2,16 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
-import { Table } from 'antd';
+import { Table, Modal, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons'
 
 function Franquias() {
     // Estado que gerencia franquias
     const [franquias, setFranquias] = useState([])
     // Estado que controla o loading
     const [loading, setLoading] = useState(true)
+    // Estado que contrala a exibicao do modal
+    const [modalVisible, setModalVisible] = useState(false)
 
     // Funcao que é responsavel por trazer os dados de franquia
     async function carregarFranquias(params) {
@@ -54,9 +57,26 @@ function Franquias() {
         }
     ]
 
+    const showModal = () => {
+        setModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false)
+    }
+
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}> Franquias </h1>
+            <div className={styles.top}>
+                <h1 className={styles.title}> Franquias </h1>
+                <Button
+                    type='primary'
+                    icon={<PlusOutlined />}
+                    onClick={showModal}
+                >
+                    Adicionar
+                </Button>
+            </div>
             <div className={styles.tableContainer}>
                 <Table
                     columns={colunas} // montada anteriormente
@@ -69,6 +89,13 @@ function Franquias() {
                     pagination={{ pageSize: 10 }}
                 />
             </div>
+
+            <Modal
+                open={modalVisible}
+                onCancel={closeModal}
+            >
+                <p>Aqui teremos o formulario</p>
+            </Modal>
         </div>
     )
 }
