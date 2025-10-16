@@ -77,7 +77,7 @@ export async function POST(request) {
                 { status: 400 }
             )
         }
-        
+
         const franquia = await prisma.franquia.create({
             data: {
                 nome,

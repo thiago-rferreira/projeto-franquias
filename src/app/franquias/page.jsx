@@ -1,60 +1,28 @@
-'use client'
+'use client' //Pois vamos utilizar hooks
 
-import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import React, { useState, useEffect } from 'react'
+import styles from './franquias.module.css'
 
 function Franquias() {
+    // Estado que gerencia franquias
+    const [franquias, setFranquias] = useState([])
+    // Estado que controla o loading
+    const [loading, setLoading] = useState(true)
 
-    //Criar uma variavel para armazenar a lista de franquias
-    const [franquias, setFranquias] = useState([]);
-
-    async function carregarFranquias() {
-        try {
-            const response = await fetch('/api/franquias')
-            const data = await response.json()
-            setFranquias(data);
-        } catch (error) {
-            console.error(error);
-        }
+    // Funcao que é responsavel por trazer os dados de franquia
+    async function carregarFranquias(params) {
+        console.log('Aqui teremos o buscar franquias')
+        setLoading(false)
     }
 
     useEffect(() => {
-        carregarFranquias();
+        carregarFranquias()
     }, [])
 
-    //Table do antd
-
-    const columns = [
-        {
-            title: 'Nome',
-            dataIndex: 'nome',
-            key: 'id'
-        },
-        {
-            title: 'Cidade',
-            dataIndex: 'cidade',
-            key: 'id'
-        },
-        {
-            title: 'Endereço',
-            dataIndex: 'endereco',
-            key: 'id'
-        },
-        {
-            title: 'Telefone',
-            dataIndex: 'telefone',
-            key: 'id'
-        }
-    ]
-
     return (
-        <div>
-            <h1>Tabela de Franquias</h1>
-            <Table
-                columns={columns}
-                dataSource={franquias}
-                rowKey='id'
-            />
+        <div className={styles.main}>
+            <h1> Franquias </h1>
+            <p>{JSON.stringify(franquias)}</p>
         </div>
     )
 }
