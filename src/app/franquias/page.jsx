@@ -12,7 +12,17 @@ function Franquias() {
     // Funcao que é responsavel por trazer os dados de franquia
     async function carregarFranquias(params) {
         console.log('Aqui teremos o buscar franquias')
-        setLoading(false)
+        try {
+            //o fetch, em getAll
+            const response = await fetch('/api/franquias')
+            const data = await response.json()
+            setFranquias(data);
+
+        } catch (error) {
+            console.error('Erro ao carregar franquias', error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -20,9 +30,9 @@ function Franquias() {
     }, [])
 
     return (
-        <div className={styles.main}>
+        <div className={styles.container}>
             <h1> Franquias </h1>
-            <p>{JSON.stringify(franquias)}</p>
+            {loading ? <p>Carregando</p> : <pre>{JSON.stringify(franquias, null, 2)}</pre>}
         </div>
     )
 }
