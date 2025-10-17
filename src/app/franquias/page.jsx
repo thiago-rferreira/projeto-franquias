@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
-import { Table, Modal, Button } from 'antd';
+import { Table, Modal, Button, Form, message, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'
 
 function Franquias() {
@@ -12,6 +12,10 @@ function Franquias() {
     const [loading, setLoading] = useState(true)
     // Estado que contrala a exibicao do modal
     const [modalVisible, setModalVisible] = useState(false)
+    // Criar uma instancia para usar o form
+    const [form] = Form.useForm()
+
+    const [messageApi, contextHolder] = message.useMessage();
 
     // Funcao que é responsavel por trazer os dados de franquia
     async function carregarFranquias(params) {
@@ -26,6 +30,29 @@ function Franquias() {
             console.error('Erro ao carregar franquias', error)
         } finally {
             setLoading(false)
+        }
+    }
+
+    // Funcao que é responsavel por salvar a franquia
+    async function salvarFranquia(values) {
+        try {
+            const response = await fetch('/api/franquias', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)
+            })
+
+            if (response.ok) {
+                messageApi.success('Franquia criada com sucesso!')
+                setModalVisible(false)
+                form.resetFields()
+                carregarFranquias()
+            } else {
+                messageApi.error('Erro ao salvar franquia')
+            }
+        } catch (error) {
+            messageApi.error('Erro ao salvar franquia')
+            console.error('Erro ao salvar franquia', error)
         }
     }
 
@@ -59,19 +86,21 @@ function Franquias() {
 
     const showModal = () => {
         setModalVisible(true);
+
     };
 
     const closeModal = () => {
         setModalVisible(false)
+        form.resetFields()
     }
 
     const okModal = () => {
-        console.log('Clicou no OK');
-        setModalVisible(false)
+        form.submit()
     }
 
     return (
         <div className={styles.container}>
+            {contextHolder}
             <div className={styles.top}>
                 <h1 className={styles.title}> Franquias </h1>
                 <Button
@@ -102,8 +131,31 @@ function Franquias() {
                 onCancel={closeModal}
                 onOk={okModal}
             >
-                <p>Aqui teremos o formulario</p>
+                <Form
+                    form={form}
+                    layout='vertical'
+                    onFinish={salvarFranquia}
+                    className={styles.modalForm}
+                >
+                    <Form.Item name="nome" label="Digite o nome" rules={[{ required: true, message: 'Preecha o seu nome' }]}>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item name="cidade" label="Digite a cidade" rules={[{ required: true, message: 'Preecha sua cidade' }]}>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item name="endereco" label="Digite o endereço" rules={[{ required: true, message: 'Preecha seu endereço' }]}>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item name="telefone" label="Digite o telefone" rules={[{ required: true, message: 'Preecha seu telefone' }]}>
+                        <Input />
+                    </Form.Item>
+
+                </Form>
             </Modal>
+
         </div>
     )
 }
