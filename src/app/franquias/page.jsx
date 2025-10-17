@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
-import { Table, Modal, Button, Form, message, Input } from 'antd';
-import { PlusOutlined } from '@ant-design/icons'
+import { Table, Modal, Button, Form, message, Input, Space } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 function Franquias() {
     // Estado que gerencia franquias
@@ -81,6 +81,26 @@ function Franquias() {
             title: 'Telefone',
             dataIndex: 'telefone',
             key: 'id'
+        },
+        {
+            title: 'Ações',
+            key: 'acoes',
+            render: (_, record) => (
+                <Space>
+                    <Button
+                        icon={<EditOutlined />}
+                        size='small'
+                    //On click deeepois
+                    />
+                    <Button
+                        icon={<DeleteOutlined />}
+                        size='small'
+                        danger
+                    //OnClick depois
+                    />
+                </Space>
+
+            )
         }
     ]
 
