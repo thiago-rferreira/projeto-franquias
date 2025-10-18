@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
-import { Table, Modal, Button, Form, message, Input, Space } from 'antd';
+import { Table, Modal, Button, Form, message, Input, Space, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 function Franquias() {
@@ -87,6 +87,25 @@ function Franquias() {
         setModalVisible(true)
     }
 
+    // Remover
+    async function removerFranquia(id) {
+        try {
+            const response = await fetch(`/api/franquias/${id}`, {
+                method: 'DELETE'
+            })
+
+            if (response.ok) {
+                message.success('Franquia removida')
+                carregarFranquias()
+            } else {
+                message.error('Erro ao apagar franquia')
+            }
+        } catch (error) {
+            message.error('Erro ao apagar franquia')
+            console.error('Erro ao apagar franquia', error)
+        }
+    }
+
     useEffect(() => {
         carregarFranquias()
     }, [])
@@ -124,12 +143,20 @@ function Franquias() {
                         onClick={() => editar(franquia)}
                     //On click deeepois
                     />
-                    <Button
-                        icon={<DeleteOutlined />}
-                        size='small'
-                        danger
-                    //OnClick depois
-                    />
+                    <Popconfirm
+                        title='Confirma remover?'
+                        onConfirm={() => removerFranquia(franquia.id)}
+                        okText="Sim"
+                        cancelText="Não"
+                    >
+                        <Button
+                            icon={<DeleteOutlined />}
+                            size='small'
+                            danger
+                        //OnClick depois
+                        />
+                    </Popconfirm>
+
                 </Space>
 
             )
