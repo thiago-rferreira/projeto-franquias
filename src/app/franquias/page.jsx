@@ -17,9 +17,11 @@ function Franquias() {
 
     const [messageApi, contextHolder] = message.useMessage();
 
+    // Estado que controla se eu estou editando ou nao
+    const [editandoId, setEditandoId] = useState(null);
+
     // Funcao que é responsavel por trazer os dados de franquia
     async function carregarFranquias(params) {
-        console.log('Aqui teremos o buscar franquias')
         try {
             //o fetch, em getAll
             const response = await fetch('/api/franquias')
@@ -35,25 +37,54 @@ function Franquias() {
 
     // Funcao que é responsavel por salvar a franquia
     async function salvarFranquia(values) {
+        //Salvando ao adicionar e editar
         try {
-            const response = await fetch('/api/franquias', {
-                method: 'POST',
+            // URL da req
+            // const url = editandoId ? `/api/franquias/${editandoId}` : '/api/franquias'
+            let url = ''
+            let tipo = ''
+            let msg = ''
+
+            if (editandoId) {
+                // PUT
+                url = `/api/franquias/${editandoId}`
+                tipo = 'PUT'
+                msg = 'Franquia atualizada com sucesso!'
+            } else {
+                //POST
+                url = '/api/franquias'
+                tipo = 'POST'
+                msg = 'Franquia adicionada com sucesso!'
+            }
+
+            // Response
+            const response = await fetch(url, {
+                method: tipo, // editandoId ? 'PUT' : 'POST'
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             })
 
             if (response.ok) {
-                messageApi.success('Franquia criada com sucesso!')
+                message.success(msg)
                 setModalVisible(false)
                 form.resetFields()
+                setEditandoId(null)
                 carregarFranquias()
             } else {
-                messageApi.error('Erro ao salvar franquia')
+                message.error('Erro ao salvar franquia!')
             }
+
         } catch (error) {
-            messageApi.error('Erro ao salvar franquia')
+            message.error('Erro ao salvar franquia.')
             console.error('Erro ao salvar franquia', error)
         }
+    }
+
+    // funcao de controle editar
+    function editar(franquia) {
+        setEditandoId(franquia.id)
+        form.setFieldsValue(franquia)
+        setModalVisible(true)
     }
 
     useEffect(() => {
@@ -85,11 +116,12 @@ function Franquias() {
         {
             title: 'Ações',
             key: 'acoes',
-            render: (_, record) => (
+            render: (_, franquia) => (
                 <Space>
                     <Button
                         icon={<EditOutlined />}
                         size='small'
+                        onClick={() => editar(franquia)}
                     //On click deeepois
                     />
                     <Button
@@ -112,6 +144,7 @@ function Franquias() {
     const closeModal = () => {
         setModalVisible(false)
         form.resetFields()
+        setEditandoId(null)
     }
 
     const okModal = () => {
@@ -146,7 +179,7 @@ function Franquias() {
             </div>
 
             <Modal
-                title="Nova Franquia"
+                title={editandoId ? 'Editar Franquia' : 'Adicionar Franquia'}
                 open={modalVisible}
                 onCancel={closeModal}
                 onOk={okModal}
