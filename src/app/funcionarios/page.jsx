@@ -35,6 +35,8 @@ function Funcionarios() {
             const response = await fetch('/api/funcionarios')
             const data = await response.json()
             setFuncionarios(data)
+
+            setLoading(false) // Desativa
         } catch (error) {
             console.error('Erro ao carregar funcionarios', error)
         } finally {
@@ -54,7 +56,36 @@ function Funcionarios() {
     }
 
     // Salvar funcionarios
+    const colunas = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'E-mail',
+            dataIndex: 'email',
+            key: 'email'
+        },
+        {
+            title: 'Cargo',
+            dataIndex: 'cargo',
+            key: 'cargo'
+        },
+        {
+            title: 'Salário',
+            dataIndex: 'salario',
+            key: 'salario',
+            render: (valor) => valor ? `R$${valor}` : 'R$ 0,00'
+        },
+        {
+            title: 'Franquia',
+            dataIndex: ['franquia', 'nome'], // acessar franquia.nome dentro o obj
+            key: 'franquia',
+            render: (nome) => nome ?? 'Sem franquia'
 
+        }
+    ]
 
     // Carregar os dados usando o useEffect
     useEffect(() => {
@@ -63,7 +94,21 @@ function Funcionarios() {
     }, [])
 
     return (
-        <div>Funcionarios</div>
+        <div className={styles.container}>
+            <div className={styles.top}>
+                <h1 className={styles.title}> Funcionarios </h1>
+            </div>
+
+            <div className={styles.tableContainer}>
+                <Table
+                    columns={colunas}
+                    dataSource={funcionarios}
+                    loading={loading}
+                    rowKey="id"
+                    pagination={{ pageSize: 15 }}
+                />
+            </div>
+        </div>
     )
 }
 
