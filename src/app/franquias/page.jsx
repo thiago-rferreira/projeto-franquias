@@ -165,7 +165,6 @@ function Franquias() {
 
     const showModal = () => {
         setModalVisible(true);
-
     };
 
     const closeModal = () => {

@@ -27,3 +27,7 @@
     border-radius: 4px;
     padding: 16px;
 }
+
+.inputNumber {
+    width: 100%;
+}

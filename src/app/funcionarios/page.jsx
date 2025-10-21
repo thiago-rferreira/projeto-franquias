@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import styles from './funcionarios.module.css'
-import { Table, Modal, Button, Form, message, Input, Space, Popconfirm, Select } from 'antd'
+import { Table, Modal, Button, Form, message, Input, InputNumber, Space, Popconfirm, Select } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 
@@ -55,7 +55,28 @@ function Funcionarios() {
         }
     }
 
+    const showModal = () => {
+        setModalVisible(true);
+    }
+
+    const closeModal = () => {
+        setModalVisible(false)
+        form.resetFields()
+    }
+
+    const okModal = () => {
+        form.submit()
+    }
+
     // Salvar funcionarios
+
+    async function salvarFuncionario(params) {
+        console.log('Foiii')
+        // Req para a API
+
+        setModalVisible(false)
+    }
+
     const colunas = [
         {
             title: 'Nome',
@@ -97,6 +118,14 @@ function Funcionarios() {
         <div className={styles.container}>
             <div className={styles.top}>
                 <h1 className={styles.title}> Funcionarios </h1>
+                <Button
+                    type='primary'
+                    icon={<PlusOutlined />}
+                    className={styles.addButton}
+                    onClick={showModal}
+                >
+                    Adicionar
+                </Button>
             </div>
 
             <div className={styles.tableContainer}>
@@ -108,6 +137,80 @@ function Funcionarios() {
                     pagination={{ pageSize: 15 }}
                 />
             </div>
+
+            <Modal
+                title='Novo Funcionário'
+                open={modalVisible}
+                onCancel={closeModal}
+                onOk={okModal}
+            >
+                <Form
+                    form={form}
+                    layout='vertical'
+                    onFinish={salvarFuncionario}
+                >
+
+                    <Form.Item
+                        name='nome'
+                        label='Nome'
+                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='email'
+                        label='E-mail'
+                        rules={[
+                            { required: true, message: 'Campo obrigatório' },
+                            { type: 'email', message: 'Email inválido' }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='cargo'
+                        label='Cargo'
+                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='salario'
+                        label='Salário'
+                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                    >
+                        <InputNumber
+                            style={{ width: '100%' }}
+                            step={100}
+                            prefix='R$'
+                            min={0}
+                            precision={2}
+                            decimalSeparator=','
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='franquiaId'
+                        label='Franquia'
+                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                    >
+                        <Select
+                            placeholder='Selecione uma franquia'
+                            showSearch
+                            optionFilterProp='children'
+                        >
+                            {franquias.map(franquia => (
+                                <Select.Option key={franquia.id} value={franquia.id}>
+                                    {franquia.nome}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     )
 }
