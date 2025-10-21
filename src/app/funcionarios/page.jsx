@@ -70,9 +70,27 @@ function Funcionarios() {
 
     // Salvar funcionarios
 
-    async function salvarFuncionario(params) {
-        console.log('Foiii')
-        // Req para a API
+    async function salvarFuncionario(values) {
+
+        try {
+            const response = await fetch('/api/funcionarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)
+            })
+
+            if (response.ok) {
+                setModalVisible(false)
+                console.log('Funcionario cadastrado')
+                form.resetFields()
+                carregarFuncionarios()
+            } else {
+                console.error('Erro ao cadastrar funcionario')
+            }
+
+        } catch (error) {
+            console.error('Erro ao salvar funcionario', error)
+        }
 
         setModalVisible(false)
     }
