@@ -1,69 +1,69 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Table } from 'antd'
+import React, { useEffect, useState } from 'react'
+import styles from './funcionarios.module.css'
+import { Table, Modal, Button, Form, message, Input, Space, Popconfirm, Select } from 'antd'
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+
 
 function Funcionarios() {
 
-    //criar uma variavel que armazena funcionarios, usando estado/state
+    //Estados
+
+    //Fraquias, para usar no SELECT
+    const [franquias, setFranquias] = useState([])
+
+    //Funcionarios, para usar na tabela
     const [funcionarios, setFuncionarios] = useState([])
 
-    //criar uma funcao que carrega dos dados da API
+    //Loading para controlar o carregamento da tabela
+    const [loading, setLoading] = useState(true)
+
+    //Modal que vai controlar se a tela de cadastro esta aberta ou fechada
+    const [modalVisible, setModalVisible] = useState(false)
+
+    //Hook do Antd que controla o form
+    const [form] = Form.useForm()
+
+
+    // Criar uma funcao que carrega as funcionarios para mim da API/Banco
     async function carregarFuncionarios() {
         try {
-            const response = await fetch('/api/funcionarios') // faz a requisicao
-            const data = await response.json() // convertidos em JSON
+            setLoading(true) // Ativa o spinner do carregamento
+
+            //Fazer a req
+            const response = await fetch('/api/funcionarios')
+            const data = await response.json()
             setFuncionarios(data)
         } catch (error) {
             console.error('Erro ao carregar funcionarios', error)
+        } finally {
+
         }
     }
 
-    // Useeffect, é realizado quando a pagina é montada.
+    // Criar uma funcao que carrega as franquias para ser utilizada no Select
+    async function carregarFranquias() {
+        try {
+            const response = await fetch('/api/franquias')
+            const data = await response.json()
+            setFranquias(data)
+        } catch (error) {
+            console.error('Erro ao carregar franquias')
+        }
+    }
+
+    // Salvar funcionarios
+
+
+    // Carregar os dados usando o useEffect
     useEffect(() => {
-        carregarFuncionarios();
+        carregarFuncionarios()
+        carregarFranquias()
     }, [])
 
-    //Table, a configuracao das colunas
-
-    const colunas = [
-        {
-            title: 'Nome', // Nome da coluna
-            dataIndex: 'nome', // campo que vai vir do resultado da API,
-            key: 'id' // identificador
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'id'
-        },
-        {
-            title: 'Cargo',
-            dataIndex: 'cargo',
-            key: 'id'
-        },
-        {
-            title: 'Salário',
-            dataIndex: 'salario',
-            key: 'id',
-            render: (s) => `R$ ${s.toFixed(2)}`
-        },
-        {
-            title: 'Franquia',
-            dataIndex: ['franquia', 'nome'],
-            key: 'id'
-        }
-    ]
-
     return (
-        <div>
-            <h1>Funcionários</h1>
-            <Table
-                columns={colunas}
-                dataSource={funcionarios}
-                rowKey="id"
-            />
-        </div>
+        <div>Funcionarios</div>
     )
 }
 
