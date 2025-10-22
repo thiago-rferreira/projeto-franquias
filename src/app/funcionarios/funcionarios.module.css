@@ -22,12 +22,38 @@
     gap: 10px;
 }
 
+.titleIcon {
+    color: #1890ff;
+}
+
 .tableContainer {
     background: white;
     border-radius: 4px;
     padding: 16px;
 }
 
-.inputNumber {
-    width: 100%;
+.modalForm {
+    margin-top: 16px;
+}
+
+.formItem {
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .header {
+        flex-direction: column;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .addButton {
+        width: 100%;
+    }
 }
