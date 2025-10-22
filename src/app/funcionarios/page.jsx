@@ -22,6 +22,9 @@ function Funcionarios() {
     //Modal que vai controlar se a tela de cadastro esta aberta ou fechada
     const [modalVisible, setModalVisible] = useState(false)
 
+    //Editando para controlar se é edit ou criar
+    const [editandoId, setEditandoId] = useState(null)
+
     //Hook do Antd que controla o form
     const [form] = Form.useForm()
 
@@ -62,6 +65,7 @@ function Funcionarios() {
     const closeModal = () => {
         setModalVisible(false)
         form.resetFields()
+        setEditandoId(null)
     }
 
     const okModal = () => {
@@ -73,16 +77,20 @@ function Funcionarios() {
     async function salvarFuncionario(values) {
 
         try {
-            const response = await fetch('/api/funcionarios', {
-                method: 'POST',
+            const url = editandoId ? `/api/funcionarios/${editandoId}` : '/api/funcionarios'
+
+            const response = await fetch(url, {
+                method: editandoId ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             })
 
+            console.log(response)
+
             if (response.ok) {
                 setModalVisible(false)
-                console.log('Funcionario cadastrado')
                 form.resetFields()
+                setEditandoId(null)
                 carregarFuncionarios()
             } else {
                 console.error('Erro ao cadastrar funcionario')
@@ -92,8 +100,33 @@ function Funcionarios() {
             console.error('Erro ao salvar funcionario', error)
         }
 
-        setModalVisible(false)
     }
+
+    async function removerFuncionario(id) {
+        try {
+            const response = await fetch(`/api/funcionarios/${id}`, {
+                method: 'DELETE'
+            })
+
+            if (response.ok) {
+                //Deu certo!
+                carregarFuncionarios();
+            } else {
+                console.error('Erro ao remover funcionario')
+            }
+        } catch (error) {
+            console.error('Erro ao remover funcionario', error)
+        }
+    }
+
+    function editar(funcionario) {
+        setEditandoId(funcionario.id)
+        form.setFieldsValue(funcionario)
+        setModalVisible(true)
+
+        console.log(funcionario)
+    }
+
 
     const colunas = [
         {
@@ -123,6 +156,33 @@ function Funcionarios() {
             key: 'franquia',
             render: (nome) => nome ?? 'Sem franquia'
 
+        },
+        {
+            title: 'Ações',
+            key: 'acoes',
+            render: (_, funcionario) => (
+                <Space>
+                    <Button
+                        icon={<EditOutlined />}
+                        size='small'
+                        onClick={() => editar(funcionario)}
+                    />
+                    <Popconfirm
+                        title='Confirma remover?'
+                        okText="Sim"
+                        cancelText="Não"
+                        onConfirm={() => removerFuncionario(funcionario.id)}
+                    >
+                        <Button
+                            icon={<DeleteOutlined />}
+                            size='small'
+                            danger
+                        />
+                    </Popconfirm>
+
+                </Space>
+
+            )
         }
     ]
 
@@ -157,10 +217,12 @@ function Funcionarios() {
             </div>
 
             <Modal
-                title='Novo Funcionário'
+                title={editandoId ? 'Editar funcionário' : 'Adicionar funcionário'}
                 open={modalVisible}
                 onCancel={closeModal}
                 onOk={okModal}
+                maskClosable={false}
+                keyboard={false}
             >
                 <Form
                     form={form}
