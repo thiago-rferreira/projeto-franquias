@@ -1,10 +1,10 @@
 'use client'
 
 import { Menu } from 'antd'
-import { 
-  HomeOutlined, 
-  UserOutlined, 
-  ShopOutlined, 
+import {
+  HomeOutlined,
+  UserOutlined,
+  ShopOutlined,
   DashboardOutlined,
   RocketOutlined
 } from '@ant-design/icons'
@@ -35,18 +35,13 @@ export default function Header() {
       key: '/dashboard',
       label: <Link href="/dashboard">Dashboard</Link>,
       icon: <DashboardOutlined />
-    },
-    {
-      key: '/teste',
-      label: <Link href="/teste">Teste</Link>,
-      icon: <RocketOutlined />
     }
   ]
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        
+
         {/* Logo/Título */}
         <Link href="/" className={styles.logo}>
           <h2 className={styles.logoText}>
