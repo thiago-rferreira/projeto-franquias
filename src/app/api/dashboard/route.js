@@ -56,14 +56,59 @@ export async function GET() {
         // CUIDADO: Pegadinha em entrevistas.
         const salarioMedio = totalFuncionarios > 0 ? somaSalarios / totalFuncionarios : 0
 
+        // ------------------- Agrupamento: Franquias por cidade -------------------
+        // { cidade: "Salvador", total: 2 }[...]
+
+        const cidades = [] // Array para guardar o resultado
+        // { cidade: "Salvador", total: 1 }, { cidade: "Campinas", total: 1}
+
+        franquias.forEach(franquia => {
+            // O .find procura dentro de cidades(array que criamos) e retorna para gente o objeto que ele acha ou undefined se nao achar
+            const existe = cidades.find(c => c.cidade === franquia.cidade)
+
+            // Decidir o que fazer 
+            if (existe) {
+                // O existe carrega para gente um objeto
+                // { cidade: "Campinas", total: 5 }
+                existe.total++ // Adicionar +1 em total, no ex ficaria { cidade: "Campinas", total: 6 }
+            } else {
+                // Se nao existe, cria um novo objeto dentro de cidades
+                cidades.push({
+                    cidade: franquia.cidade,
+                    total: 1
+                })
+            }
+        })
+
+        // Ordenar do maior para o maior para o menor
+        cidades.sort((a, b) => b.total - a.total)
+
+        /*
+         Como fazer pela query
+
+        const cidades = await prisma.franquia.groupBy({
+        by: ['cidade'],
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } }
+    })
+
+       Resposta -> [{ cidade: 'São Paulo', _count: { id: 15 } }, ...]
+
+        const resultado = cidades.map(c => ({
+        cidade: c.cidade,
+        total: c._count.id
+    }))
+        */
+
 
         // Retorno de tudo
 
         const dashboard = {
             totalFranquias,
             totalFuncionarios,
-            somaSalarios: somaSalarios,
-            salarioMedio: salarioMedio
+            somaSalarios,
+            salarioMedio,
+            cidades
         }
 
         return NextResponse.json(dashboard)
