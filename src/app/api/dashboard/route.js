@@ -32,29 +32,41 @@ export async function GET() {
             }
         })
 
-        //------------ Total -------------
+        //------------ Total de franquias e funcionarios -------------
 
         // O .length retorna o tamanho do array/objeto sempre
         const totalFranquias = franquias.length
         const totalFuncionarios = funcionarios.length
 
+        // --------------- Somas dos Salarios ---------------
 
+        //Variavel auxiliar
+        let somaSalarios = 0; // Sempre começar soma com 0
 
+        //Vamos fazer um loop que percorre funcionarios, e soma o salario de cada um
+        //nessa variavel somaSalarios.
 
+        funcionarios.forEach(funcionario => {
+            console.log(somaSalarios)
+            somaSalarios = somaSalarios + funcionario.salario
+        })
 
+        // ------------------- Média dos salarios ---------------
 
+        // CUIDADO: Pegadinha em entrevistas.
+        const salarioMedio = totalFuncionarios > 0 ? somaSalarios / totalFuncionarios : 0
 
 
         // Retorno de tudo
 
         const dashboard = {
             totalFranquias,
-            totalFuncionarios
+            totalFuncionarios,
+            somaSalarios: somaSalarios,
+            salarioMedio: salarioMedio
         }
 
-        return NextResponse.json(
-            dashboard
-        )
+        return NextResponse.json(dashboard)
 
     } catch (error) {
         console.error('Erro ao buscar dados para a dashboard', error)
