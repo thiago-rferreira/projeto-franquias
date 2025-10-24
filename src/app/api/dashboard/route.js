@@ -194,6 +194,35 @@ export async function GET() {
         }))
 
         // -------------------  Franquias sem funcionários -------------------
+        const franquiasSemFuncionarios = []
+
+        franquias.forEach(franquia => {
+            if (franquia.funcionarios.length === 0) {
+                franquiasSemFuncionarios.push({
+                    id: franquia.id,
+                    nome: franquia.nome,
+                    cidade: franquia.cidade,
+                    createdAt: franquia.createdAt
+                })
+            }
+        })
+
+        // ------------------- Funcionarios sem franquia -----------------
+
+        const funcionariosSemFranquia = []
+
+        funcionarios.forEach(funcionario => {
+            if (funcionario.franquia.length === 0) {
+                funcionariosSemFranquia.push({
+                    id: funcionario.id,
+                    nome: funcionario.nome,
+                    cargo: funcionario.cargo,
+                    salario: funcionario.salario,
+                    createdAt: funcionario.createdAt
+                })
+            }
+        })
+
 
         // Retorno de tudo
 
@@ -207,7 +236,9 @@ export async function GET() {
             faixasSalariais,
             top5,
             ultimas5Franquias,
-            ultimos5Funcionarios
+            ultimos5Funcionarios,
+            franquiasSemFuncionarios,
+            funcionariosSemFranquia
         }
 
         return NextResponse.json(dashboard)
