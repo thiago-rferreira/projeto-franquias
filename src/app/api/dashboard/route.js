@@ -47,14 +47,15 @@ export async function GET() {
         //nessa variavel somaSalarios.
 
         funcionarios.forEach(funcionario => {
-            console.log(somaSalarios)
-            somaSalarios = somaSalarios + funcionario.salario
+            //somaSalarios = somaSalarios + funcionario.salario
+            somaSalarios += funcionario.salario
         })
 
         // ------------------- Média dos salarios ---------------
 
         // CUIDADO: Pegadinha em entrevistas.
         const salarioMedio = totalFuncionarios > 0 ? somaSalarios / totalFuncionarios : 0
+
 
         // ------------------- Agrupamento: Franquias por cidade -------------------
         // { cidade: "Salvador", total: 2 }[...]
@@ -170,7 +171,7 @@ export async function GET() {
         // --------------------- 5 ultimas franquias cadastradas e 5 ultimos funcionarios cadastrados --------------------
 
         // Ja vem ordenado do back, só cortar os 5 primeiros
-        //
+        // 5 ultimas franquias cadastradas
         const ultimas5Franquias = franquias.slice(0, 5).map(franquia => ({
             id: franquia.id,
             nome: franquia.nome,
@@ -180,8 +181,19 @@ export async function GET() {
         }))
 
         // Continuar na proxima aula, paramos em 5 funcionários cadastrados
+        // 5 ultimos funcionarios cadastrados
 
+        let ultimos5Funcionarios = funcionarios.slice(0, 5)
 
+        ultimos5Funcionarios = ultimos5Funcionarios.map(funcionario => ({
+            id: funcionario.id,
+            nome: funcionario.nome,
+            cargo: funcionario.cargo,
+            franquia: funcionario.franquia?.nome || 'Sem franquia',
+            createdAt: funcionario.createdAt
+        }))
+
+        // -------------------  Franquias sem funcionários -------------------
 
         // Retorno de tudo
 
@@ -194,7 +206,8 @@ export async function GET() {
             cargos,
             faixasSalariais,
             top5,
-            ultimas5Franquias
+            ultimas5Franquias,
+            ultimos5Funcionarios
         }
 
         return NextResponse.json(dashboard)
