@@ -165,6 +165,21 @@ export async function GET() {
         //Ordenar todasFranquias
         todasFranquias.sort((a, b) => b.totalFuncionarios - a.totalFuncionarios)
 
+        const top5 = todasFranquias.slice(0, 5)
+
+        // --------------------- 5 ultimas franquias cadastradas e 5 ultimos funcionarios cadastrados --------------------
+
+        // Ja vem ordenado do back, só cortar os 5 primeiros
+        //
+        const ultimas5Franquias = franquias.slice(0, 5).map(franquia => ({
+            id: franquia.id,
+            nome: franquia.nome,
+            cidade: franquia.cidade,
+            totalFuncionarios: franquia.funcionarios.length,
+            createdAt: franquia.createdAt
+        }))
+
+        // Continuar na proxima aula, paramos em 5 funcionários cadastrados
 
 
 
@@ -178,7 +193,8 @@ export async function GET() {
             cidades,
             cargos,
             faixasSalariais,
-            todasFranquias
+            top5,
+            ultimas5Franquias
         }
 
         return NextResponse.json(dashboard)
