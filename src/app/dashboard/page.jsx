@@ -331,6 +331,59 @@ function Dashboard() {
                 </Col>
             </Row>
 
+
+            {
+                (dashboardData.franquiasSemFuncionarios.length > 0 && (
+                    <Row>
+                        <Col xs={24} lg={8}>
+                            <Card title='Franquias sem funcionarios' >
+                                <Alert
+                                    message='Atenção'
+                                    description='Existe franquias sem funcionarios'
+                                    type='warning'
+                                    showIcon
+                                />
+                                <Table
+                                    dataSource={dashboardData.franquiasSemFuncionarios}
+                                    columns={colunasFranquiasSemFuncionario}
+                                    rowKey='id'
+                                    pagination={false}
+                                    size='small'
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
+                ))
+
+
+            }
+
+            {
+                (dashboardData.funcionarioSemFranquias && (
+                    <Row>
+                        <Col xs={24} lg={8}>
+                            <Card title='Funcionarios sem franquias' >
+                                <Alert
+                                    message='Atenção'
+                                    description='Existe funcionarios sem franquias'
+                                    type='warning'
+                                    showIcon
+                                />
+                                <Table
+                                    dataSource={dashboardData.funcionarioSemFranquias}
+                                    columns={colunasFuncionariosSemFranquia}
+                                    rowKey='id'
+                                    pagination={false}
+                                    size='small'
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
+
+                ))
+            }
+
+
         </div>
     )
 }
