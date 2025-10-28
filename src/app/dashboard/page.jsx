@@ -3,7 +3,31 @@
 import React, { useState, useEffect } from 'react'
 import styles from './dashboard.module.css'
 
-import { Spin } from 'antd'
+import { Card, Row, Col, Table, Statistic, Spin, message, Alert } from 'antd'
+
+import {
+    DashboardOutlined,
+    ShopOutlined,
+    UserOutlined,
+    DollarOutlined,
+    WalletOutlined,
+    WarningOutlined
+} from '@ant-design/icons'
+
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer
+} from 'recharts'
+import { Key } from 'lucide-react'
+
 
 function Dashboard() {
     const [loading, setLoading] = useState(true)
@@ -41,7 +65,7 @@ function Dashboard() {
         return (
             <div className={styles.container}>
                 <div className={styles.loading}>
-                    <Spin size='large' tip='Carregando...' />
+                    <Spin size='large' />
                     <p>Carregando...</p>
                 </div>
             </div>
@@ -59,11 +83,106 @@ function Dashboard() {
         )
     }
 
-    // Continuar o JSX e o CSS
+    const colunasTopFranquias = [
+        {
+            title: 'Franquia',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Cidade',
+            dataIndex: 'cidade',
+            key: 'cidade'
+        },
+        {
+            title: 'Funcionários',
+            dataIndex: 'totalFuncionarios',
+            key: 'totalFuncionarios'
+        },
+        {
+            title: 'Folha salarial',
+            dataIndex: 'totalSalario',
+            key: 'totalSalario'
+        }
+    ]
+
+    const colunasUltimasFranquias = [
+        {
+            title: 'Franquia',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Cidade',
+            dataIndex: 'cidade',
+            key: 'cidade'
+        },
+        {
+            title: 'Cadastrada em',
+            dataIndex: 'createdAt',
+            key: 'createdAt'
+        }
+    ]
+
+    const colunasUltimosFuncionarios = [
+        {
+            title: 'Funcionario',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Cargo',
+            dataIndex: 'cargo',
+            key: 'cargo'
+        },
+        {
+            title: 'Franquia',
+            dataIndex: 'franquia',
+            key: 'franquia'
+        }
+    ]
+
+    const colunasFranquiasSemFuncionario = [
+        {
+            title: 'Franquia',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Cidade',
+            dataIndex: 'cidade',
+            key: 'cidade'
+        },
+        {
+            title: 'Criado em...',
+            dataIndex: 'createdAt',
+            key: 'createdAt'
+        }
+
+    ]
+
+    const colunasFuncionariosSemFranquia = [
+        {
+            title: 'Funcionario',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Cargo',
+            dataIndex: 'cargo',
+            key: 'cargo'
+        }
+    ]
+
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}> Dashboard - BI</h1>
+            <h1 className={styles.title}> Dashboard - B.I.
+                <DashboardOutlined className={styles.titleIcon} />
+            </h1>
+
+
+
         </div>
     )
 }
