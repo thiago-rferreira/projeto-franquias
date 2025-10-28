@@ -61,28 +61,6 @@ function Dashboard() {
     }, [])
 
 
-    if (loading) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.loading}>
-                    <Spin size='large' />
-                    <p>Carregando...</p>
-                </div>
-            </div>
-        )
-    }
-
-    if (!dashboardData) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.loading}>
-                    <p>Erro ao carregar dados da dashboard!</p>
-                    <p>Tente novamente mais tarde!</p>
-                </div>
-            </div>
-        )
-    }
-
     const colunasTopFranquias = [
         {
             title: 'Franquia',
@@ -174,6 +152,32 @@ function Dashboard() {
         }
     ]
 
+    if (loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.loading}>
+                    <Spin size='large' />
+                    <p>Carregando...</p>
+                </div>
+            </div>
+        )
+    }
+
+    if (!dashboardData) {
+        return (
+            <div className={styles.container}>
+                <Alert
+                    message='Erro ao carregar dados!'
+                    description='Não foi possível carregar as informações da dashboard'
+                    type='error'
+                    showIcon
+                />
+            </div>
+        )
+    }
+
+
+
 
     return (
         <div className={styles.container}>
@@ -181,7 +185,54 @@ function Dashboard() {
                 <DashboardOutlined className={styles.titleIcon} />
             </h1>
 
+            <Row gutter={[16, 16]} className={styles.statsRow}>
+                <Col xs={24} sm={12} lg={6}>
+                    <Card className={styles.statCard}>
+                        <Statistic
+                            title='Total de franquias'
+                            value={dashboardData.totalFranquias}
+                            valueStyle={{ color: '#667eea' }}
+                            prefix={<ShopOutlined />}
+                        />
+                    </Card>
+                </Col>
 
+                <Col xs={24} sm={12} lg={6}>
+                    <Card className={styles.statCard}>
+                        <Statistic
+                            title='Total de Funcionários'
+                            value={dashboardData.totalFuncionarios}
+                            valueStyle={{ color: '#764ba2' }}
+                            prefix={<UserOutlined />}
+                        />
+                    </Card>
+                </Col>
+
+                <Col xs={24} sm={12} lg={6}>
+                    <Card className={styles.statCard}>
+                        <Statistic
+                            title='Folha Salarial Total'
+                            value={dashboardData.somaSalarios}
+                            valueStyle={{ color: '#52c41a' }}
+                            prefix={<DollarOutlined />}
+                            formatter={(valor) => `R$ ${valor.toLocaleString('pt-BR')}`}
+                        />
+                    </Card>
+                </Col>
+
+
+                <Col xs={24} sm={12} lg={6}>
+                    <Card className={styles.statCard}>
+                        <Statistic
+                            title='Salário Médio'
+                            value={dashboardData.salarioMedio.toFixed(2)}
+                            formatter={(valor) => `R$ ${valor.toLocaleString('pt-BR')}`}
+                            prefix={<WalletOutlined />}
+                            valueStyle={{ color: '#f5576c' }}
+                        />
+                    </Card>
+                </Col>
+            </Row>
 
         </div>
     )
