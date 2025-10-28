@@ -26,7 +26,6 @@ import {
     Cell,
     ResponsiveContainer
 } from 'recharts'
-import { Key } from 'lucide-react'
 
 
 function Dashboard() {
@@ -152,6 +151,8 @@ function Dashboard() {
         }
     ]
 
+    const COLORS = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe']
+
     if (loading) {
         return (
             <div className={styles.container}>
@@ -232,6 +233,50 @@ function Dashboard() {
                         />
                     </Card>
                 </Col>
+            </Row>
+
+            <Row gutter={[16, 16]} className={styles.chartRow}>
+
+                <Col xs={24} lg={12}>
+                    <Card title='Franquias por cidade'>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={dashboardData.cidades} height={300}>
+                                <CartesianGrid strokeDasharray='3 3' />
+                                <XAxis dataKey="cidade" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey='total' fill='#667eea' />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Card>
+                </Col>
+
+                <Col xs={24} lg={12}>
+                    <Card title='Funcionarios por cargo'>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <PieChart>
+                                <Pie
+                                    data={dashboardData.cargos}
+                                    cx='50%'
+                                    cy='50%'
+                                    outerRadius={100}
+                                    dataKey='total'
+                                    fill='#8884d8'
+                                    label={({ cargo, total }) => `${cargo} : ${total}`}
+
+                                >
+                                    {dashboardData.cargos.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+
+                        </ResponsiveContainer>
+                    </Card>
+
+                </Col>
+
             </Row>
 
         </div>
