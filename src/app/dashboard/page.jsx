@@ -97,7 +97,8 @@ function Dashboard() {
         {
             title: 'Cadastrada em',
             dataIndex: 'createdAt',
-            key: 'createdAt'
+            key: 'createdAt',
+            render: (data) => new Date(data).toLocaleDateString('pt-BR')
         }
     ]
 
@@ -277,6 +278,57 @@ function Dashboard() {
 
                 </Col>
 
+                <Col xs={24} lg={24}>
+                    <Card title='Distribuição de faixa salarial'>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={dashboardData.faixasSalariais} height={300}>
+                                <CartesianGrid strokeDasharray='3 3' />
+                                <XAxis dataKey="faixa" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey='quantidade' fill='#667eea' />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col xs={24} lg={8}>
+                    <Card title='Top 5 Franquias' >
+                        <Table
+                            dataSource={dashboardData.top5}
+                            columns={colunasTopFranquias}
+                            rowKey='id'
+                            pagination={false}
+                            size='small'
+                        />
+                    </Card>
+                </Col>
+
+                <Col xs={24} lg={8}>
+                    <Card title=' Últimas Franquias Cadastradas' >
+                        <Table
+                            dataSource={dashboardData.ultimas5Franquias}
+                            columns={colunasUltimasFranquias}
+                            rowKey='id'
+                            pagination={false}
+                            size='small'
+                        />
+                    </Card>
+                </Col>
+
+                <Col xs={24} lg={8}>
+                    <Card title='Últimos Funcionários Cadastrados' >
+                        <Table
+                            dataSource={dashboardData.ultimos5Funcionarios}
+                            columns={colunasUltimosFuncionarios}
+                            rowKey='id'
+                            pagination={false}
+                            size='small'
+                        />
+                    </Card>
+                </Col>
             </Row>
 
         </div>
