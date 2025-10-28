@@ -10,7 +10,7 @@ import {
     ShopOutlined,
     UserOutlined,
     DollarOutlined,
-    WalletOutlined,
+    WalletOutlined
 } from '@ant-design/icons'
 
 import {
