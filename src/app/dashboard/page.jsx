@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './dashboard.module.css'
 
-import { Card, Row, Col, Table, Statistic, Spin, message, Alert } from 'antd'
+import { Card, Row, Col, Table, Statistic, Spin, Alert } from 'antd'
 
 import {
     DashboardOutlined,
@@ -11,7 +11,6 @@ import {
     UserOutlined,
     DollarOutlined,
     WalletOutlined,
-    WarningOutlined
 } from '@ant-design/icons'
 
 import {
