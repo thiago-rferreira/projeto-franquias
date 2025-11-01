@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './funcionarios.module.css'
 import { Table, Modal, Button, Form, message, Input, InputNumber, Space, Popconfirm, Select } from 'antd'
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons'
 
 
 function Funcionarios() {
@@ -27,6 +27,9 @@ function Funcionarios() {
 
     //Hook do Antd que controla o form
     const [form] = Form.useForm()
+
+    // Estado para o filtro de buscar
+    const [filtroNome, setFiltroNome] = useState('')
 
 
     // Criar uma funcao que carrega as funcionarios para mim da API/Banco
@@ -127,7 +130,6 @@ function Funcionarios() {
         console.log(funcionario)
     }
 
-
     const colunas = [
         {
             title: 'Nome',
@@ -192,6 +194,10 @@ function Funcionarios() {
         carregarFranquias()
     }, [])
 
+    //Lista nova para mim, com os itens filtrados
+    const funcionariosFiltrados = funcionarios.filter(funcionario => funcionario.nome.toLowerCase().includes(filtroNome.toLowerCase()));
+
+
     return (
         <div className={styles.container}>
             <div className={styles.top}>
@@ -206,10 +212,21 @@ function Funcionarios() {
                 </Button>
             </div>
 
+            <div style={{ marginBottom: 16 }}>
+                <Input
+                    placeholder='Buscar por nome'
+                    prefix={<UserOutlined />}
+                    value={filtroNome}
+                    onChange={(e) => setFiltroNome(e.target.value)}
+                    allowClear
+                    style={{ maxWidth: 400 }}
+                />
+            </div>
+
             <div className={styles.tableContainer}>
                 <Table
                     columns={colunas}
-                    dataSource={funcionarios}
+                    dataSource={funcionariosFiltrados}
                     loading={loading}
                     rowKey="id"
                     pagination={{ pageSize: 15 }}
