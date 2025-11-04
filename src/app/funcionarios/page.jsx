@@ -195,7 +195,14 @@ function Funcionarios() {
     }, [])
 
     //Lista nova para mim, com os itens filtrados
-    const funcionariosFiltrados = funcionarios.filter(funcionario => funcionario.nome.toLowerCase().includes(filtroNome.toLowerCase()));
+    const funcionariosFiltrados = funcionarios.filter(f => {
+        const pesquisa = filtroNome.toLowerCase()
+        return (
+            f.nome.toLowerCase().includes(pesquisa) ||
+            f.cargo.toLowerCase().includes(pesquisa) ||
+            f.email.toLowerCase().includes(pesquisa)
+        )
+    });
 
 
     return (
@@ -214,7 +221,7 @@ function Funcionarios() {
 
             <div style={{ marginBottom: 16 }}>
                 <Input
-                    placeholder='Buscar por nome'
+                    placeholder='Buscar por funcionário'
                     prefix={<UserOutlined />}
                     value={filtroNome}
                     onChange={(e) => setFiltroNome(e.target.value)}
