@@ -11,8 +11,6 @@ function Franquias() {
     const [modalVisible, setModalVisible] = useState(false)
     const [form] = Form.useForm()
 
-    const [messageApi, contextHolder] = message.useMessage();
-
     const [editandoId, setEditandoId] = useState(null);
 
     const [filtroNome, setFiltroNome] = useState('');
@@ -175,7 +173,6 @@ function Franquias() {
 
     return (
         <div className={styles.container}>
-            {contextHolder}
             <div className={styles.top}>
                 <h1 className={styles.title}> Franquias </h1>
                 <Button
