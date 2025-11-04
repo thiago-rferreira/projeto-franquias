@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
-import { Table, Modal, Button, Form, message, Input, Space, Popconfirm } from 'antd';
+import { Table, Modal, Button, Form, message, Input, Space, Popconfirm, Empty } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ShopOutlined } from '@ant-design/icons'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 function Franquias() {
+
     const [franquias, setFranquias] = useState([])
     const [loading, setLoading] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
     const [form] = Form.useForm()
-
     const [editandoId, setEditandoId] = useState(null);
-
     const [filtroNome, setFiltroNome] = useState('');
 
     async function carregarFranquias(params) {
@@ -28,10 +29,7 @@ function Franquias() {
     }
 
     async function salvarFranquia(values) {
-        //Salvando ao adicionar e editar
         try {
-            // URL da req
-            // const url = editandoId ? `/api/franquias/${editandoId}` : '/api/franquias'
             let url = ''
             let tipo = ''
             let msg = ''
@@ -48,21 +46,26 @@ function Franquias() {
                 msg = 'Franquia adicionada com sucesso!'
             }
 
-            // Response
             const response = await fetch(url, {
-                method: tipo, // editandoId ? 'PUT' : 'POST'
+                method: tipo,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             })
 
             if (response.ok) {
-                message.success(msg)
                 setModalVisible(false)
                 form.resetFields()
                 setEditandoId(null)
                 carregarFranquias()
+
+                if (editandoId) {
+                    toast.success('Franquia editada')
+                } else {
+                    toast.success('Franquia cadastrada')
+                }
             } else {
                 message.error('Erro ao salvar franquia!')
+                toast.error('Erro ao salvar franquia!')
             }
 
         } catch (error) {
@@ -86,18 +89,44 @@ function Franquias() {
             if (response.ok) {
                 message.success('Franquia removida')
                 carregarFranquias()
+                toast.success('Franquia deletada!')
             } else {
                 message.error('Erro ao apagar franquia')
+                toast.error('Erro ao apagar franquia!')
             }
         } catch (error) {
-            message.error('Erro ao apagar franquia')
             console.error('Erro ao apagar franquia', error)
+            toast.error('Erro ao apagar franquia!')
         }
     }
 
     useEffect(() => {
-        carregarFranquias()
+        try {
+            carregarFranquias()
+            toast.success('Franquias carregadas com sucesso!')
+        } catch (error) {
+            toast.error('Erro ao carregar franquias')
+        }
     }, [])
+
+    const formatarTelefone = (telefone) => {
+        if (!telefone) return ''
+
+        const somenteNumeros = telefone.split('').filter(c => c >= '0' && c <= '9').join('')
+
+        const ddd = somenteNumeros.slice(0, 2)
+        const parte1 = somenteNumeros.length === 11
+            ? somenteNumeros.slice(2, 7)  // celular
+            : somenteNumeros.slice(2, 6)  // fixo
+        const parte2 = somenteNumeros.length === 11
+            ? somenteNumeros.slice(7)
+            : somenteNumeros.slice(6)
+
+        if (somenteNumeros.length < 10) return somenteNumeros
+
+        return `(${ddd}) ${parte1}-${parte2}`
+    }
+
 
     const colunas = [
         {
@@ -118,7 +147,8 @@ function Franquias() {
         {
             title: 'Telefone',
             dataIndex: 'telefone',
-            key: 'id'
+            key: 'id',
+            render: (telefone) => formatarTelefone(telefone)
         },
         {
             title: 'Ações',
@@ -203,7 +233,14 @@ function Franquias() {
                         tip: 'Carregando franquias, aguarde...'
                     }}
                     rowKey="id"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{
+                        pageSize: 15,
+                        showSizeChanger: true,
+                        showTotal: (total) => `Total de ${total} franquias`
+                    }}
+                    locale={{
+                        emptyText: <Empty description="Nenhuma franquia encontrada" />
+                    }}
                 />
             </div>
 
@@ -219,7 +256,7 @@ function Franquias() {
                     onFinish={salvarFranquia}
                     className={styles.modalForm}
                 >
-                    <Form.Item name="nome" label="Digite o nome" rules={[{ required: true, message: 'Preecha o seu nome' }]}>
+                    <Form.Item name="nome" label="Digite o nome" rules={[{ required: true, message: 'Preecha o seu nome' }, { min: 3, message: 'Nome deve ter no min 3 caracteres' }]}>
                         <Input />
                     </Form.Item>
 
@@ -231,8 +268,14 @@ function Franquias() {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="telefone" label="Digite o telefone" rules={[{ required: true, message: 'Preecha seu telefone' }]}>
-                        <Input />
+                    <Form.Item name="telefone" label="Digite o telefone" rules={[{ required: true, message: 'Preecha seu telefone' }, {
+                        min: 10,
+                        max: 11,
+                        message: 'O telefone deve conter entre 10 e 11 dígitos!'
+                    }]}>
+                        <Input
+                            maxLength={11}
+                        />
                     </Form.Item>
 
                 </Form>

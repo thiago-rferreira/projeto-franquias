@@ -4,10 +4,8 @@ import React, { useEffect, useState } from 'react'
 import styles from './funcionarios.module.css'
 import { Table, Modal, Button, Form, Input, InputNumber, Space, Popconfirm, Select, Empty } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons'
-
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
 
 function Funcionarios() {
 
