@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏢 Gerenciador de Franquias
 
-## Getting Started
+**Curso 1 — 60 horas | 18 aulas de 3h**
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎯 Objetivo do Curso
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Capacitar os alunos a **desenvolver um sistema interno completo de gestão de franquias**, permitindo:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- 📍 Cadastrar unidades  
+- 👥 Gerenciar funcionários  
+- 📈 Controlar indicadores de desempenho  
+- 🧾 Gerar relatórios estratégicos  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O sistema será construído com **Next.js** e **SQLite**, e publicado via **Coolify**, simulando um ambiente corporativo real de desenvolvimento **full-stack**.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 💡 Justificativa
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Empresas que possuem múltiplas franquias necessitam de **sistemas integrados** que consolidem informações de todas as unidades.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Este curso oferece **experiência prática completa**, abrangendo:
 
-## Deploy on Vercel
+- Desenvolvimento **Backend e Frontend**
+- **CRUDs corporativos**
+- **Dashboards interativos**
+- **Relatórios estratégicos**
+- **Publicação e deploy** em ambiente real
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Tudo dentro de um projeto **colaborativo e profissional**, aproximando o aluno da vivência do mercado de tecnologia.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧰 Tecnologias e Ferramentas
+
+| Categoria | Ferramenta |
+|------------|-------------|
+| ⚛️ Framework Frontend | **Next.js 15** |
+| 🗄️ Banco de Dados | **SQLite** |
+| ☁️ Deploy & Hosting | **Coolify** |
+| 🔧 IDE de Desenvolvimento | **VSCode** |
+| 📊 Visualização de Dados | **Dashboard e Relatórios** |
+| 🔗 Controle de Versão | **Git & GitHub** |
+
+---
+
+## 👨‍💻 Perfil Profissional de Conclusão
+
+Ao concluir o curso, o aluno será capaz de:
+
+- Criar **sistemas corporativos full-stack** com Next.js e SQLite  
+- Implementar **CRUD completo** (Backend e Frontend) de franquias e funcionários  
+- Desenvolver **interfaces responsivas** consumindo APIs  
+- Criar **dashboards** com indicadores corporativos  
+- Gerar **relatórios gerenciais e estratégicos**  
+- Publicar sistemas via **Coolify**, **VPS** ou **domínio próprio**  
+- Aplicar **boas práticas de versionamento e deploy**
+
+---
+
+## 🖥️ Requisitos de Acesso
+
+- 💻 Computador com **Windows, Mac ou Linux**  
+- 🌐 Conexão à **internet**  
+- 🧭 **Navegador atualizado** (Chrome, Firefox ou Edge)  
+- 🧠 Noções básicas de **programação web** e **Git**
+
+---
+
+## 🚀 Estrutura do Curso
+
+- **Carga horária:** 60 horas  
+- **Distribuição:** 18 aulas de 3h  
+- **Modalidade:** Prática e orientada a projeto  
+- **Produto final:** Sistema corporativo completo de gestão de franquias  
+
+---
+
+## 🧩 Conteúdo Prático
+
+1. Configuração do ambiente de desenvolvimento  
+2. Criação do projeto Next.js  
+3. Implementação do banco de dados SQLite  
+4. Desenvolvimento das rotas e APIs  
+5. CRUD de franquias e funcionários  
+6. Integração Frontend ↔ Backend  
+7. Criação do dashboard de indicadores  
+8. Geração de relatórios gerenciais  
+9. Deploy via Coolify  
+10. Versionamento com Git e GitHub  
+
+---
+
+## 🌟 Resultado Final
+
+Um **sistema interno completo** de gestão de franquias, com:
+
+- Painel administrativo moderno  
+- Controle de unidades e equipes  
+- Indicadores visuais de desempenho  
+- Relatórios dinâmicos e exportáveis  
+- Deploy funcional via Coolify  
+
+---
+
+> _“Aprenda desenvolvendo um sistema real e domine o ciclo completo de criação, integração e publicação de aplicações web modernas.”_
+
+---
+
+📘 **Instrutor:** Thiago Ferreira Rodrigues  
+📅 **Curso 1 — Gerenciador de Franquias**  
+🔗 **Tecnologias:** Next.js | SQLite | Coolify | GitHub
+
+---
