@@ -86,13 +86,15 @@ function Franquias() {
                 method: 'DELETE'
             })
 
+            const data = await response.json()
+
             if (response.ok) {
                 message.success('Franquia removida')
                 carregarFranquias()
                 toast.success('Franquia deletada!')
             } else {
                 message.error('Erro ao apagar franquia')
-                toast.error('Erro ao apagar franquia!')
+                toast.error(data.error)
             }
         } catch (error) {
             console.error('Erro ao apagar franquia', error)
