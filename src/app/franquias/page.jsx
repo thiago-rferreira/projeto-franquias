@@ -1,4 +1,4 @@
-'use client' //Pois vamos utilizar hooks
+'use client'
 
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
@@ -6,28 +6,20 @@ import { Table, Modal, Button, Form, message, Input, Space, Popconfirm } from 'a
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 function Franquias() {
-    // Estado que gerencia franquias
     const [franquias, setFranquias] = useState([])
-    // Estado que controla o loading
     const [loading, setLoading] = useState(true)
-    // Estado que contrala a exibicao do modal
     const [modalVisible, setModalVisible] = useState(false)
-    // Criar uma instancia para usar o form
     const [form] = Form.useForm()
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    // Estado que controla se eu estou editando ou nao
     const [editandoId, setEditandoId] = useState(null);
 
-    // Funcao que é responsavel por trazer os dados de franquia
     async function carregarFranquias(params) {
         try {
-            //o fetch, em getAll
             const response = await fetch('/api/franquias')
             const data = await response.json()
             setFranquias(data);
-
         } catch (error) {
             console.error('Erro ao carregar franquias', error)
         } finally {
@@ -35,7 +27,6 @@ function Franquias() {
         }
     }
 
-    // Funcao que é responsavel por salvar a franquia
     async function salvarFranquia(values) {
         //Salvando ao adicionar e editar
         try {
@@ -80,14 +71,12 @@ function Franquias() {
         }
     }
 
-    // funcao de controle editar
     function editar(franquia) {
         setEditandoId(franquia.id)
         form.setFieldsValue(franquia)
         setModalVisible(true)
     }
 
-    // Remover
     async function removerFranquia(id) {
         try {
             const response = await fetch(`/api/franquias/${id}`, {
@@ -110,7 +99,6 @@ function Franquias() {
         carregarFranquias()
     }, [])
 
-    // Colunas para o Table do Antd
     const colunas = [
         {
             title: 'Nome',
@@ -141,7 +129,6 @@ function Franquias() {
                         icon={<EditOutlined />}
                         size='small'
                         onClick={() => editar(franquia)}
-                    //On click deeepois
                     />
                     <Popconfirm
                         title='Confirma remover?'
@@ -153,7 +140,6 @@ function Franquias() {
                             icon={<DeleteOutlined />}
                             size='small'
                             danger
-                        //OnClick depois
                         />
                     </Popconfirm>
 
@@ -193,12 +179,12 @@ function Franquias() {
             </div>
             <div className={styles.tableContainer}>
                 <Table
-                    columns={colunas} // montada anteriormente
-                    dataSource={franquias} // que vem da API
+                    columns={colunas}
+                    dataSource={franquias}
                     loading={{
                         spinning: loading,
                         tip: 'Carregando franquias, aguarde...'
-                    }} // Controla o preenchimento da tabela
+                    }}
                     rowKey="id"
                     pagination={{ pageSize: 10 }}
                 />
