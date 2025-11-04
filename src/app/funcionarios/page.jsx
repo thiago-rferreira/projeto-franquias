@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import styles from './funcionarios.module.css'
-import { Table, Modal, Button, Form, message, Input, InputNumber, Space, Popconfirm, Select } from 'antd'
+import { Table, Modal, Button, Form, Input, InputNumber, Space, Popconfirm, Select, Empty } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons'
 
 import { toast } from 'react-toastify'
@@ -226,7 +226,14 @@ function Funcionarios() {
                     dataSource={funcionariosFiltrados}
                     loading={loading}
                     rowKey="id"
-                    pagination={{ pageSize: 15 }}
+                    pagination={{
+                        pageSize: 15,
+                        showSizeChanger: true,
+                        showTotal: (total) => `Total de ${total} funcionários`
+                    }}
+                    locale={{
+                        emptyText: <Empty description="Nenhum funcionário encontrado" />
+                    }}
                 />
             </div>
 
@@ -247,7 +254,7 @@ function Funcionarios() {
                     <Form.Item
                         name='nome'
                         label='Nome'
-                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                        rules={[{ required: true, message: 'Campo obrigatório' }, { min: 3, message: 'Nome deve ter no mínimo 3 caracteres' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -266,7 +273,7 @@ function Funcionarios() {
                     <Form.Item
                         name='cargo'
                         label='Cargo'
-                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                        rules={[{ required: true, message: 'Campo obrigatório' }, { min: 3, message: 'Cargo deve ter no mínimo 3 caracteres' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -274,7 +281,11 @@ function Funcionarios() {
                     <Form.Item
                         name='salario'
                         label='Salário'
-                        rules={[{ required: true, message: 'Campo obrigatório' }]}
+                        rules={[{ required: true, message: 'Campo obrigatório' }, {
+                            type: 'number',
+                            min: 100,
+                            message: 'Salário deve ser maior que 100'
+                        }]}
                     >
                         <InputNumber
                             style={{ width: '100%' }}
@@ -283,6 +294,7 @@ function Funcionarios() {
                             min={0}
                             precision={2}
                             decimalSeparator=','
+                            placeholder='0,00'
                         />
                     </Form.Item>
 

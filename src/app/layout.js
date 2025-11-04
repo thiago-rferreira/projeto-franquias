@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
     <html lang="pt-BR">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={2500} />
         {children}
       </body>
     </html>
