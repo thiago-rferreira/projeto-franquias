@@ -5,52 +5,34 @@ import styles from './funcionarios.module.css'
 import { Table, Modal, Button, Form, message, Input, InputNumber, Space, Popconfirm, Select } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons'
 
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 
 function Funcionarios() {
 
-    //Estados
-
-    //Fraquias, para usar no SELECT
     const [franquias, setFranquias] = useState([])
-
-    //Funcionarios, para usar na tabela
     const [funcionarios, setFuncionarios] = useState([])
-
-    //Loading para controlar o carregamento da tabela
     const [loading, setLoading] = useState(true)
-
-    //Modal que vai controlar se a tela de cadastro esta aberta ou fechada
     const [modalVisible, setModalVisible] = useState(false)
-
-    //Editando para controlar se é edit ou criar
     const [editandoId, setEditandoId] = useState(null)
-
-    //Hook do Antd que controla o form
     const [form] = Form.useForm()
-
-    // Estado para o filtro de buscar
     const [filtroNome, setFiltroNome] = useState('')
 
-
-    // Criar uma funcao que carrega as funcionarios para mim da API/Banco
     async function carregarFuncionarios() {
         try {
-            setLoading(true) // Ativa o spinner do carregamento
-
-            //Fazer a req
+            setLoading(true)
             const response = await fetch('/api/funcionarios')
             const data = await response.json()
             setFuncionarios(data)
-
-            setLoading(false) // Desativa
         } catch (error) {
             console.error('Erro ao carregar funcionarios', error)
+            toast.error('Erro ao carregar funcionários');
         } finally {
-
+            setLoading(false)
         }
     }
 
-    // Criar uma funcao que carrega as franquias para ser utilizada no Select
     async function carregarFranquias() {
         try {
             const response = await fetch('/api/franquias')
@@ -58,6 +40,7 @@ function Funcionarios() {
             setFranquias(data)
         } catch (error) {
             console.error('Erro ao carregar franquias')
+            toast.error('Erro ao carregar franquias')
         }
     }
 
@@ -75,32 +58,38 @@ function Funcionarios() {
         form.submit()
     }
 
-    // Salvar funcionarios
-
     async function salvarFuncionario(values) {
-
         try {
             const url = editandoId ? `/api/funcionarios/${editandoId}` : '/api/funcionarios'
-
             const response = await fetch(url, {
                 method: editandoId ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             })
 
-            console.log(response)
-
             if (response.ok) {
                 setModalVisible(false)
                 form.resetFields()
                 setEditandoId(null)
                 carregarFuncionarios()
-            } else {
-                console.error('Erro ao cadastrar funcionario')
-            }
 
+                if (editandoId) {
+                    toast.success('Funcionário editado')
+                } else {
+                    toast.success('Funcionário cadastrado')
+                }
+
+            } else {
+                if (editandoId) {
+                    console.error('Erro ao editar funcionario')
+                    toast.error('Erro ao editar funcionário')
+                } else {
+                    console.error('Erro ao cadastrar funcionario')
+                    toast.error('Erro ao cadastrar funcionário')
+                }
+            }
         } catch (error) {
-            console.error('Erro ao salvar funcionario', error)
+            console.error('Erro na funcao de salvar funcionario', error)
         }
 
     }
@@ -112,10 +101,11 @@ function Funcionarios() {
             })
 
             if (response.ok) {
-                //Deu certo!
                 carregarFuncionarios();
+                toast.success('Funcionário removido')
             } else {
                 console.error('Erro ao remover funcionario')
+                toast.error('Erro ao remover funcionario')
             }
         } catch (error) {
             console.error('Erro ao remover funcionario', error)
@@ -126,8 +116,6 @@ function Funcionarios() {
         setEditandoId(funcionario.id)
         form.setFieldsValue(funcionario)
         setModalVisible(true)
-
-        console.log(funcionario)
     }
 
     const colunas = [
@@ -154,7 +142,7 @@ function Funcionarios() {
         },
         {
             title: 'Franquia',
-            dataIndex: ['franquia', 'nome'], // acessar franquia.nome dentro o obj
+            dataIndex: ['franquia', 'nome'],
             key: 'franquia',
             render: (nome) => nome ?? 'Sem franquia'
 
@@ -188,13 +176,16 @@ function Funcionarios() {
         }
     ]
 
-    // Carregar os dados usando o useEffect
     useEffect(() => {
-        carregarFuncionarios()
-        carregarFranquias()
+        try {
+            carregarFuncionarios()
+            carregarFranquias()
+            toast.success('Funcionários carregados com sucesso!')
+        } catch (error) {
+            toast.error('Erro ao carregar funcionários e franquias!')
+        }
     }, [])
 
-    //Lista nova para mim, com os itens filtrados
     const funcionariosFiltrados = funcionarios.filter(f => {
         const pesquisa = filtroNome.toLowerCase()
         return (
@@ -203,7 +194,6 @@ function Funcionarios() {
             f.email.toLowerCase().includes(pesquisa)
         )
     });
-
 
     return (
         <div className={styles.container}>
