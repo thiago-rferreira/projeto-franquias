@@ -1,0 +1,4 @@
+quantidade de itens por página não está funcionando corretamente
+
+Faltou tirar o pageSize do código
+

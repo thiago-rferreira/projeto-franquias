@@ -133,7 +133,8 @@ function Dashboard() {
         {
             title: 'Criado em...',
             dataIndex: 'createdAt',
-            key: 'createdAt'
+            key: 'createdAt',
+            render: (data) => new Date(data).toLocaleDateString('pt-BR')
         }
 
     ]
