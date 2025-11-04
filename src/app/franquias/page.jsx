@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './franquias.module.css'
 import { Table, Modal, Button, Form, message, Input, Space, Popconfirm } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { PlusOutlined, EditOutlined, DeleteOutlined, ShopOutlined } from '@ant-design/icons'
 
 function Franquias() {
     const [franquias, setFranquias] = useState([])
@@ -14,6 +14,8 @@ function Franquias() {
     const [messageApi, contextHolder] = message.useMessage();
 
     const [editandoId, setEditandoId] = useState(null);
+
+    const [filtroNome, setFiltroNome] = useState('');
 
     async function carregarFranquias(params) {
         try {
@@ -163,6 +165,14 @@ function Franquias() {
         form.submit()
     }
 
+    const franquiasFiltradas = franquias.filter(f => {
+        const pesquisa = filtroNome.toLowerCase();
+        return (
+            f.nome.toLowerCase().includes(pesquisa) || f.cidade.toLowerCase().includes(pesquisa) ||
+            f.endereco.toLowerCase().includes(pesquisa)
+        )
+    })
+
     return (
         <div className={styles.container}>
             {contextHolder}
@@ -177,10 +187,20 @@ function Franquias() {
                     Adicionar
                 </Button>
             </div>
+            <div style={{ marginBottom: 16 }}>
+                <Input
+                    placeholder='Buscar franquia por nome ou cidade'
+                    prefix={<ShopOutlined />}
+                    value={filtroNome}
+                    onChange={(e) => setFiltroNome(e.target.value)}
+                    style={{ maxWidth: 400 }}
+                    allowClear
+                />
+            </div>
             <div className={styles.tableContainer}>
                 <Table
                     columns={colunas}
-                    dataSource={franquias}
+                    dataSource={franquiasFiltradas}
                     loading={{
                         spinning: loading,
                         tip: 'Carregando franquias, aguarde...'
