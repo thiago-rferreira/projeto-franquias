@@ -12,7 +12,7 @@ export default function Home() {
 
       <div className={styles.header}>
         <h1 className={styles.title}>Sistema de Franquias</h1>
-        <p className={styles.subtitle}>Gerencie suas franquias e funcionários</p>
+        <p className={styles.subtitle}>Gerencie suas franquias e funcionários!</p>
       </div>
 
       <div className={styles.cardsContainer}>

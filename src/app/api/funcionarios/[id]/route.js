@@ -90,7 +90,6 @@ export async function PUT(request, { params }) {
 
         const { nome, email, cargo, salario, franquiaId } = data
 
-        // Verificar se funcionario existe
         const funcionarioExiste = await prisma.funcionario.findUnique({
             where: { id }
         })
@@ -102,7 +101,6 @@ export async function PUT(request, { params }) {
             )
         }
 
-        // Verificar se estou passando algum dado, ali de data
         if (!data || Object.keys(data).length === 0) {
             return NextResponse.json(
                 { error: 'Voce precisa enviar algum dado' },
@@ -110,7 +108,6 @@ export async function PUT(request, { params }) {
             )
         }
 
-        // Verifico se tem franquiaId, entao verifico se franquia existe
         if (franquiaId) {
             // Verificar se franquia existe usando o franquiaId
             const franquia = await prisma.franquia.findUnique({

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import styles from './funcionarios.module.css'
-import { Table, Modal, Button, Form, Input, InputNumber, Space, Popconfirm, Select, Empty } from 'antd'
+import { Table, Button, Form, Input, InputNumber, Space, Popconfirm, Select, Empty } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -12,7 +12,6 @@ function Funcionarios() {
     const [franquias, setFranquias] = useState([])
     const [funcionarios, setFuncionarios] = useState([])
     const [loading, setLoading] = useState(true)
-    const [modalVisible, setModalVisible] = useState(false)
     const [editandoId, setEditandoId] = useState(null)
     const [form] = Form.useForm()
     const [filtroNome, setFiltroNome] = useState('')
@@ -42,20 +41,6 @@ function Funcionarios() {
         }
     }
 
-    const showModal = () => {
-        setModalVisible(true);
-    }
-
-    const closeModal = () => {
-        setModalVisible(false)
-        form.resetFields()
-        setEditandoId(null)
-    }
-
-    const okModal = () => {
-        form.submit()
-    }
-
     async function salvarFuncionario(values) {
         try {
             const url = editandoId ? `/api/funcionarios/${editandoId}` : '/api/funcionarios'
@@ -66,45 +51,25 @@ function Funcionarios() {
             })
 
             if (response.ok) {
-                setModalVisible(false)
                 form.resetFields()
                 setEditandoId(null)
                 carregarFuncionarios()
-
-                if (editandoId) {
-                    toast.success('Funcionário editado')
-                } else {
-                    toast.success('Funcionário cadastrado')
-                }
-
+                toast.success(editandoId ? 'Funcionário editado' : 'Funcionário cadastrado')
             } else {
-                if (editandoId) {
-                    console.error('Erro ao editar funcionario')
-                    toast.error('Erro ao editar funcionário')
-                } else {
-                    console.error('Erro ao cadastrar funcionario')
-                    toast.error('Erro ao cadastrar funcionário')
-                }
+                toast.error(editandoId ? 'Erro ao editar funcionário' : 'Erro ao cadastrar funcionário')
             }
         } catch (error) {
             console.error('Erro na funcao de salvar funcionario', error)
         }
-
     }
 
     async function removerFuncionario(id) {
         try {
-            const response = await fetch(`/api/funcionarios/${id}`, {
-                method: 'DELETE'
-            })
-
+            const response = await fetch(`/api/funcionarios/${id}`, { method: 'DELETE' })
             if (response.ok) {
                 carregarFuncionarios();
                 toast.success('Funcionário removido')
-            } else {
-                console.error('Erro ao remover funcionario')
-                toast.error('Erro ao remover funcionario')
-            }
+            } else toast.error('Erro ao remover funcionário')
         } catch (error) {
             console.error('Erro ao remover funcionario', error)
         }
@@ -113,208 +78,105 @@ function Funcionarios() {
     function editar(funcionario) {
         setEditandoId(funcionario.id)
         form.setFieldsValue(funcionario)
-        setModalVisible(true)
     }
 
     const colunas = [
-        {
-            title: 'Nome',
-            dataIndex: 'nome',
-            key: 'nome'
-        },
-        {
-            title: 'E-mail',
-            dataIndex: 'email',
-            key: 'email'
-        },
-        {
-            title: 'Cargo',
-            dataIndex: 'cargo',
-            key: 'cargo'
-        },
+        { title: 'Nome', dataIndex: 'nome', key: 'nome' },
+        { title: 'E-mail', dataIndex: 'email', key: 'email' },
+        { title: 'Cargo', dataIndex: 'cargo', key: 'cargo' },
         {
             title: 'Salário',
             dataIndex: 'salario',
             key: 'salario',
-            render: (valor) => valor ? `R$${valor}` : 'R$ 0,00'
+            render: (v) => v ? `R$${v}` : 'R$ 0,00'
         },
         {
             title: 'Franquia',
             dataIndex: ['franquia', 'nome'],
             key: 'franquia',
-            render: (nome) => nome ?? 'Sem franquia'
-
+            render: (n) => n ?? 'Sem franquia'
         },
         {
             title: 'Ações',
             key: 'acoes',
-            render: (_, funcionario) => (
+            render: (_, f) => (
                 <Space>
-                    <Button
-                        icon={<EditOutlined />}
-                        size='small'
-                        onClick={() => editar(funcionario)}
-                    />
+                    <Button icon={<EditOutlined />} size='small' onClick={() => editar(f)} />
                     <Popconfirm
                         title='Confirma remover?'
                         okText="Sim"
                         cancelText="Não"
-                        onConfirm={() => removerFuncionario(funcionario.id)}
+                        onConfirm={() => removerFuncionario(f.id)}
                     >
-                        <Button
-                            icon={<DeleteOutlined />}
-                            size='small'
-                            danger
-                        />
+                        <Button icon={<DeleteOutlined />} size='small' danger />
                     </Popconfirm>
-
                 </Space>
-
             )
         }
     ]
 
     useEffect(() => {
-        try {
-            carregarFuncionarios()
-            carregarFranquias()
-            toast.success('Funcionários carregados com sucesso!')
-        } catch (error) {
-            toast.error('Erro ao carregar funcionários e franquias!')
-        }
+        carregarFuncionarios()
+        carregarFranquias()
     }, [])
 
     const funcionariosFiltrados = funcionarios.filter(f => {
-        const pesquisa = filtroNome.toLowerCase()
-        return (
-            f.nome.toLowerCase().includes(pesquisa) ||
-            f.cargo.toLowerCase().includes(pesquisa) ||
-            f.email.toLowerCase().includes(pesquisa)
-        )
-    });
+        const p = filtroNome.toLowerCase()
+        return f.nome.toLowerCase().includes(p) || f.cargo.toLowerCase().includes(p) || f.email.toLowerCase().includes(p)
+    })
 
     return (
         <div className={styles.container}>
-            <div className={styles.top}>
-                <h1 className={styles.title}> Funcionarios </h1>
-                <Button
-                    type='primary'
-                    icon={<PlusOutlined />}
-                    className={styles.addButton}
-                    onClick={showModal}
-                >
-                    Adicionar
-                </Button>
-            </div>
+            <h1 className={styles.title}>Funcionários</h1>
 
-            <div style={{ marginBottom: 16 }}>
-                <Input
-                    placeholder='Buscar por funcionário'
-                    prefix={<UserOutlined />}
-                    value={filtroNome}
-                    onChange={(e) => setFiltroNome(e.target.value)}
-                    allowClear
-                    style={{ maxWidth: 400 }}
-                />
-            </div>
+            <Form form={form} layout='inline' onFinish={salvarFuncionario} style={{ marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+                <Form.Item name='nome' rules={[{ required: true, message: 'Campo obrigatório' }]}>
+                    <Input placeholder='Nome' />
+                </Form.Item>
+                <Form.Item name='email' rules={[{ required: true, message: 'Campo obrigatório' }]}>
+                    <Input placeholder='E-mail' />
+                </Form.Item>
+                <Form.Item name='cargo' rules={[{ required: true, message: 'Campo obrigatório' }]}>
+                    <Input placeholder='Cargo' />
+                </Form.Item>
+                <Form.Item name='salario' rules={[{ required: true, message: 'Campo obrigatório' }]}>
+                    <InputNumber placeholder='Salário' min={0} style={{ width: 120 }} />
+                </Form.Item>
+                <Form.Item name='franquiaId' rules={[{ required: true, message: 'Campo obrigatório' }]}>
+                    <Select placeholder='Franquia' style={{ width: 150 }}>
+                        {franquias.map(f => (
+                            <Select.Option key={f.id} value={f.id}>{f.nome}</Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Button type='primary' htmlType='submit' icon={<PlusOutlined />}>
+                        {editandoId ? 'Salvar' : 'Adicionar'}
+                    </Button>
+                </Form.Item>
+            </Form>
 
-            <div className={styles.tableContainer}>
-                <Table
-                    columns={colunas}
-                    dataSource={funcionariosFiltrados}
-                    loading={loading}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 15,
-                        showSizeChanger: true,
-                        showTotal: (total) => `Total de ${total} funcionários`
-                    }}
-                    locale={{
-                        emptyText: <Empty description="Nenhum funcionário encontrado" />
-                    }}
-                />
-            </div>
+            <Input
+                placeholder='Buscar por funcionário'
+                prefix={<UserOutlined />}
+                value={filtroNome}
+                onChange={(e) => setFiltroNome(e.target.value)}
+                allowClear
+                style={{ maxWidth: 400, marginBottom: 16 }}
+            />
 
-            <Modal
-                title={editandoId ? 'Editar funcionário' : 'Adicionar funcionário'}
-                open={modalVisible}
-                onCancel={closeModal}
-                onOk={okModal}
-                maskClosable={false}
-                keyboard={false}
-            >
-                <Form
-                    form={form}
-                    layout='vertical'
-                    onFinish={salvarFuncionario}
-                >
-
-                    <Form.Item
-                        name='nome'
-                        label='Nome'
-                        rules={[{ required: true, message: 'Campo obrigatório' }, { min: 3, message: 'Nome deve ter no mínimo 3 caracteres' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name='email'
-                        label='E-mail'
-                        rules={[
-                            { required: true, message: 'Campo obrigatório' },
-                            { type: 'email', message: 'Email inválido' }
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name='cargo'
-                        label='Cargo'
-                        rules={[{ required: true, message: 'Campo obrigatório' }, { min: 3, message: 'Cargo deve ter no mínimo 3 caracteres' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name='salario'
-                        label='Salário'
-                        rules={[{ required: true, message: 'Campo obrigatório' }, {
-                            type: 'number',
-                            min: 100,
-                            message: 'Salário deve ser maior que 100'
-                        }]}
-                    >
-                        <InputNumber
-                            style={{ width: '100%' }}
-                            step={100}
-                            prefix='R$'
-                            min={0}
-                            precision={2}
-                            decimalSeparator=','
-                            placeholder='0,00'
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        name='franquiaId'
-                        label='Franquia'
-                        rules={[{ required: true, message: 'Campo obrigatório' }]}
-                    >
-                        <Select
-                            placeholder='Selecione uma franquia'
-                            showSearch
-                            optionFilterProp='children'
-                        >
-                            {franquias.map(franquia => (
-                                <Select.Option key={franquia.id} value={franquia.id}>
-                                    {franquia.nome}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            <Table
+                columns={colunas}
+                dataSource={funcionariosFiltrados}
+                loading={loading}
+                rowKey="id"
+                pagination={{
+                    pageSize: 15,
+                    showSizeChanger: true,
+                    showTotal: (total) => `Total de ${total} funcionários`
+                }}
+                locale={{ emptyText: <Empty description="Nenhum funcionário encontrado" /> }}
+            />
         </div>
     )
 }

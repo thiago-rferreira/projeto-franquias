@@ -7,8 +7,6 @@ const prisma = new PrismaClient()
 export async function GET() {
     try {
 
-        //---------- Trazer todos os dados do banco, para usar --------------
-
         const franquias = await prisma.franquia.findMany({
             include: {
                 funcionarios: true // Traz os funcionarios
